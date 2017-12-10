@@ -11,6 +11,7 @@ from xml.etree import ElementTree
 parser = argparse.ArgumentParser(description='libvirt_exporter scrapes domains metrics from libvirt daemon')
 parser.add_argument('-si','--scrape_interval', help='scrape interval for metrics in seconds', default= 5)
 parser.add_argument('-uri','--uniform_resource_identifier', help='Libvirt Uniform Resource Identifier', default= "qemu:///system")
+
 args = vars(parser.parse_args())
 uri = args["uniform_resource_identifier"]
 
@@ -157,16 +158,16 @@ def job(uri, g_dict, scheduler):
     print('BEGIN JOB :', time.time())
     conn = connect_to_uri(uri)
     domains = get_domains(conn)
+
     while domains is None:
         domains = get_domains(conn)
-        time.sleep(5)
+        time.sleep(int(args["scrape_interval"]))
+
+    headers_mn = ["libvirt_cpu_stats_", "libvirt_mem_stats_", \
+                  "libvirt_block_stats_", "libvirt_interface_"]
 
     for dom in domains:
-
         print(dom.name())
-
-        headers_mn = ["libvirt_cpu_stats_", "libvirt_mem_stats_", \
-                      "libvirt_block_stats_", "libvirt_interface_"]
 
         for header_mn in headers_mn:
             g_dict = add_metrics(dom, header_mn, g_dict)
