@@ -47,7 +47,7 @@ What things you need to install in case
 
 if you want to run exporter on host itself
 ```
-python==2.7.13
+python
 libvirt-python==3.7.0
 prometheus-client==0.0.21
 ```
@@ -86,10 +86,10 @@ optional arguments:
 ```
 if you want to run exporter in docker container
 ```
-docker run -i \
-   -p 9177:9177
-   -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock:Z prometheus_libvirt_exporter \
-   python prometheus_libvirt_exporter.py [-si SCRAPE_INTERVAL] [-uri UNIFORM_RESOURCE_IDENTIFIER]
+docker run --privileged -dp 9177:9177 \
+    -v /var/run/libvirt/libvirt-sock:/var/run/libvirt/libvirt-sock \
+    --name libvirt_exporter beylistan/libvirt_exporter \
+    python3 libvirt_exporter.py [-si SCRAPE_INTERVAL] [-uri UNIFORM_RESOURCE_IDENTIFIER]
 ```
 
 
