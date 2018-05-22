@@ -98,6 +98,7 @@ Install libraries:
 
 ```
 apt install python3-prometheus-client python3-libvirt
+```
 
 clone repo:
 
@@ -106,6 +107,7 @@ git clone https://github.com/beylistan/prometheus_libvirt_exporter.git
 ```
 
 use the included `init/prometheus_libvirt_explorer`
+
 ```
 cp init/prometheus_libvirt_explorer /etc/init.d/
 chmod +x /etc/init.d/prometheus_libvirt_explorer
