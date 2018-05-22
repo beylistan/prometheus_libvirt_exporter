@@ -92,4 +92,44 @@ docker run --privileged -dp 9177:9177 \
     python3 libvirt_exporter.py [-si SCRAPE_INTERVAL] [-uri UNIFORM_RESOURCE_IDENTIFIER]
 ```
 
+### Debian sysvinit install
 
+Install libraries:
+
+```
+apt install python3-prometheus-client python3-libvirt
+```
+
+clone repo:
+
+```
+git clone https://github.com/beylistan/prometheus_libvirt_exporter.git
+```
+
+use the included `init/prometheus_libvirt_explorer`
+
+```
+cp init/prometheus_libvirt_explorer /etc/init.d/
+chmod +x /etc/init.d/prometheus_libvirt_explorer
+update-rc.d prometheus_libvirt_explorer defaults
+```
+
+start:
+
+```
+/etc/init.d/prometheus_libvirt_explorer start
+```
+
+test if running:
+
+```
+lsof -i :9177
+```
+
+connect to prometheus, edit `/etc/prometheus/prometheus.yml` and add:
+```
+  - job_name: libvirt
+   # this collects libvirt stats from python3 libvirt_exporter.py 
+    static_configs:
+      - targets: ['localhost:9177']
+```
